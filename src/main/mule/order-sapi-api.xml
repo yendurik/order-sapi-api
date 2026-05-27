@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="e8edd1e6-4a14-4638-bf08-970038b6e680" >
+		<http:listener-connection host="0.0.0.0" port="8082" />
+	</http:listener-config>
+	<flow name="order-sapi-apiFlow" doc:id="d5217ae6-81a5-4731-b94c-14e83b7ec055" >
+		<http:listener doc:name="Listener" doc:id="17ce1a6f-fb67-4a37-a3ef-6b167900aab1" config-ref="HTTP_Listener_config" path="/git"/>
+		<ee:transform doc:name="Transform Message" doc:id="0df017ce-cd89-4eee-8c58-819d8eb13da6" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	"Message" : "Hello world!"
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<logger level="INFO" doc:name="Logger" doc:id="95080bec-d986-4613-a1b4-09a8db39021e" message='#["end of the flow"]'/>
+	</flow>
+</mule>
